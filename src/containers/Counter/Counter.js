@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 
 import CounterControl from "../../components/CounterControl/CounterControl";
 import CounterOutput from "../../components/CounterOutput/CounterOutput";
+import * as actionTypes from '../../store/actions';
 
 class Counter extends React.Component {
     
@@ -28,6 +29,14 @@ class Counter extends React.Component {
                     label="Subtract 15"
                     clicked={this.props.onSubtractCounter}
                 />
+                <hr/>
+                <button onClick={this.props.onStoreResult}>Store result</button>
+                <ul>
+                    {this.props.storedResults.map((resultItem) => (
+                        <li key={resultItem.id} onClick={() => this.props.onDeleteResult(resultItem.id)}>{resultItem.value}</li>
+                    ))}
+                    
+                </ul>
             </div>
         );
     }
@@ -38,7 +47,8 @@ to be used in this contaner */
 const mapStateToProps = (state) => {
     /* Returning props that should be distributed to this container */
     return {
-        ctr: state.counter
+        ctr: state.counter,
+        storedResults: state.results
     };
 };
 
@@ -46,10 +56,13 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 /* Returning prop names that hold a reference to a function that should be executed to dispatch an action */
     return {
-        onIncrementCounter: () => dispatch({ type: "INCREMENT" }),
-        onDecrementCounter: () => dispatch({ type: "DECREMENT" }),
-        onAddCounter: () => dispatch({ type: "ADD", value: 10 }),
-        onSubtractCounter: () => dispatch({ type: "SUBTRACT", value: 15 }),
+        onIncrementCounter: () => dispatch({ type: actionTypes.INCREMENT }),
+        onDecrementCounter: () => dispatch({ type: actionTypes.DECREMENT }),
+        onAddCounter: () => dispatch({ type: actionTypes.ADD, value: 10 }),
+        onSubtractCounter: () => dispatch({ type: actionTypes.SUBTRACT, value: 15 }),
+/* Not passing the current counter state because i have an access to it in the reducer */        
+        onStoreResult: () => dispatch({type: actionTypes.STORE_RESULT}),
+        onDeleteResult: (id) => dispatch({type: actionTypes.DELETE_RESULT, ElemId: id})
     };
 };
 
