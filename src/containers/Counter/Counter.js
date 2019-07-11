@@ -30,7 +30,7 @@ class Counter extends React.Component {
                     clicked={this.props.onSubtractCounter}
                 />
                 <hr/>
-                <button onClick={this.props.onStoreResult}>Store result</button>
+                <button onClick={() => this.props.onStoreResult(this.props.ctr)}>Store result</button>
                 <ul>
                     {this.props.storedResults.map((resultItem) => (
                         <li key={resultItem.id} onClick={() => this.props.onDeleteResult(resultItem.id)}>{resultItem.value}</li>
@@ -47,8 +47,8 @@ to be used in this contaner */
 const mapStateToProps = (state) => {
     /* Returning props that should be distributed to this container */
     return {
-        ctr: state.counter,
-        storedResults: state.results
+        ctr: state.ctr.counter,
+        storedResults: state.res.results
     };
 };
 
@@ -61,7 +61,7 @@ const mapDispatchToProps = (dispatch) => {
         onAddCounter: () => dispatch({ type: actionTypes.ADD, value: 10 }),
         onSubtractCounter: () => dispatch({ type: actionTypes.SUBTRACT, value: 15 }),
 /* Not passing the current counter state because i have an access to it in the reducer */        
-        onStoreResult: () => dispatch({type: actionTypes.STORE_RESULT}),
+        onStoreResult: (result) => dispatch({type: actionTypes.STORE_RESULT, result: result}),
         onDeleteResult: (id) => dispatch({type: actionTypes.DELETE_RESULT, ElemId: id})
     };
 };
